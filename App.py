@@ -74,15 +74,18 @@ class App(tkinter.Tk):
     input_label=ttk.Label(master=frame,text='ENTER YOUR DESTINATION HERE',font=font_2)
     input_label.grid(row=2,pady=25,padx=20,columnspan=2)
 
-    ttk.Label(master=frame,text='Select destination:- ',font=font_2).grid(row=3,column=0,sticky=tkinter.W,padx=20)
+    
 
+    ttk.Label(master=frame,text='Select Province:- ',font=font_2).grid(row=3,column=0,sticky=tkinter.W,padx=20)
+    provice_box=ttk.Combobox(master=frame,values=self.__PROVINCE,justify='center',width=55,textvariable=self.__province,state='readonly',font=select_font)
+    provice_box.grid(row=3,column=1,padx=10)
+
+    ttk.Label(master=frame,text='Select destination:- ',font=font_2).grid(row=4,column=0,sticky=tkinter.W,padx=20)
     select_menu=ttk.Combobox(master=frame,width=55,font=select_font,
     justify='center',values=list(self.__DESTINATIONS.keys()),textvariable=self.__distination,state='readonly')
-    select_menu.grid(row=3,column=1,pady=10,padx=10)
+    select_menu.grid(row=4,column=1,pady=10,padx=10)
 
-    ttk.Label(master=frame,text='Select Province:- ',font=font_2).grid(row=4,column=0,sticky=tkinter.W,padx=20)
-    provice_box=ttk.Combobox(master=frame,values=self.__PROVINCE,justify='center',width=55,textvariable=self.__province,state='readonly',font=select_font)
-    provice_box.grid(row=4,column=1,padx=10)
+    
 
     FILE='./assets/search32.png'
     img=tkinter.PhotoImage(file=FILE)
