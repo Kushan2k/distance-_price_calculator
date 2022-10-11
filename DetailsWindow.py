@@ -5,6 +5,7 @@ from tkinter import ttk
 import tkinter as tk
 from tkinter import messagebox
 from tkinter.font import Font
+from PIL import Image,ImageTk
 
 from CalculateWindow import CalculateWindow
 
@@ -25,6 +26,7 @@ class DetailWindow(Toplevel):
       self.price=tk.StringVar(value=0)
       self.discription=''
       self.province=''
+      self.imagepath=''
       self.style=ttk.Style()
       self.style.configure('TButton',background='blue',foreground='black')
 
@@ -33,7 +35,7 @@ class DetailWindow(Toplevel):
       self.title(self.place)
       self.resizable(False,False)
       self.conn=conn
-      self.geometry('700x600+100+100')
+      # self.geometry('700x600+100+100')
       
 
       self.__getData()
@@ -59,9 +61,22 @@ class DetailWindow(Toplevel):
     city=ttk.Label(master=mainFrame,text=self.place,font=font_head,background='lightgreen',padding=20)
     city.pack(fill=tk.BOTH,expand=True)
 
+    imgFrame=ttk.Frame(master=self,padding=20,relief='ridge')
+    imgFrame.pack(fill=tk.BOTH,expand=False,padx=20,pady=10)
+    IMG=Image.open(self.imagepath)
+
+
+    img=ImageTk.PhotoImage(IMG.resize((450,300),Image.ANTIALIAS))
+    imgl=ttk.Label(master=imgFrame,image=img)
+    imgl.image=img
+
+    imgl.grid(row=0,column=0)
+
+
+
     detailFrame=ttk.Frame(master=self,padding=30,relief='ridge')
     detailFrame.pack(fill=tk.BOTH,expand=True,padx=20,pady=20)
-
+    
 
     ttk.Label(master=detailFrame,text='Result',foreground='red').grid(row=1,column=0,sticky=tk.W)
     district=ttk.Label(master=detailFrame,text=f'Provinc -',font=font_normal)
@@ -81,14 +96,9 @@ class DetailWindow(Toplevel):
     discription=ttk.Label(master=detailFrame,text=f'{self.discription}',font=font_normal,foreground='red',wraplength=340)
     discription.grid(row=5,column=1,sticky=tk.W)
 
-
-
-    # ttk.Label(master=detailFrame,text='Cost per 1 Km').grid(row=6,columnspan=2,pady=5)
-    # self.price=ttk.Entry(master=detailFrame,textvariable=self.price)
-    # self.price.grid(row=7,columnspan=2,padx=10)
     
     generateBTN=ttk.Button(master=detailFrame,text='Calculate Price',style='TButton',width=30)
-    generateBTN.grid(row=8,columnspan=2,pady=20,padx=10)
+    generateBTN.grid(row=8,columnspan=2,pady=5,padx=10)
     generateBTN.bind('<Button-1>',self.__calculate)
 
 
@@ -102,13 +112,18 @@ class DetailWindow(Toplevel):
       cur=self.conn.cursor()
       SQL=f"SELECT * FROM place WHERE id={self.id} "
 
-      data=cur.execute(SQL)
+      cur.execute(SQL)
+      data=cur.fetchone()
+      self.distance=data[5]
+      self.discription=data[2].strip()
+      self.province=data[4].strip()
 
-      res=data.fetchone()
-      self.distance=res[2]
-      self.discription=res[3].strip()
-      self.province=res[7].strip()
+      if data[-1]!=None:
+        self.imagepath=data[-1]
+      else:
+        self.imagepath='./assets/places/placeholder.png'
     except Exception as e:
+      print(e)
       messagebox.showerror('Error',"could not fetch data")
       self.destroy()
     

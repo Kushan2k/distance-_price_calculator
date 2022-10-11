@@ -43,4 +43,4 @@ class CalculateWindow(Toplevel):
     ttk.Label(master=frame,text=f'Mode - By {self.mode.capitalize()} ',font=font_2).grid(row=3,column=0,padx=20,sticky=tk.W)
 
 
-    ttk.Label(master=frame,padding=10,text=f'Your Cost is- Rs. {self.cost} ',font=font_2).grid(row=4,column=0,sticky=tk.W,pady=20,padx=20)
+    ttk.Label(master=frame,padding=10,text=f'Your Cost is- Rs. {self.cost} ',font=font_2,background='lightgreen').grid(row=4,column=0,sticky=tk.W,pady=20,padx=20)

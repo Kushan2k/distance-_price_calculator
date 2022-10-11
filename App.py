@@ -2,7 +2,7 @@
 # imprting relavent modules 
 import tkinter
 from tkinter import ttk
-import sqlite3 as sql
+import psycopg2 as sql
 from tkinter import messagebox
 
 from DetailsWindow import DetailWindow
@@ -21,7 +21,12 @@ class App(tkinter.Tk):
       # window confugurations 
       self.title(screenName)
       self.resizable(False,False)
-      self.conn=sql.connect('db.sqlite')
+      self.conn=sql.connect(
+        database='places',
+        user='postgres',
+        port='5432',
+        password='root'
+      )
       
       self.style=ttk.Style()
       self.__DESTINATIONS={}
@@ -94,9 +99,9 @@ class App(tkinter.Tk):
     
     try:
       curser=self.conn.cursor()
-      data=curser.execute("SELECT id,name FROM place")
+      curser.execute("SELECT id,name FROM place")
 
-      for i in data.fetchall():
+      for i in curser.fetchall():
         if i != None:
           self.__DESTINATIONS[i[1].strip()]=i[0]
     except Exception as e:
@@ -111,9 +116,9 @@ class App(tkinter.Tk):
     #   self.destroy()
 
     cur=self.conn.cursor()
-    data=cur.execute("SELECT DISTINCT(province) FROM place ")
+    cur.execute("SELECT DISTINCT(province) FROM place ")
 
-    for i in data.fetchall():
+    for i in cur.fetchall():
       if i!=None:
         self.__PROVINCE.append(i[0].strip())
     
