@@ -4,6 +4,7 @@ from tkinter import Toplevel
 from tkinter import ttk
 import tkinter as tk
 from tkinter import messagebox
+from tkinter.font import Font
 
 from CalculateWindow import CalculateWindow
 
@@ -39,39 +40,52 @@ class DetailWindow(Toplevel):
       self.__BuildUI()
 
   def __BuildUI(self):
-    mainFrame=ttk.Frame(master=self)
-    mainFrame.pack(expand=True,fill=tk.X)
-    city=ttk.Label(master=mainFrame,text=self.place,font=('monospace',24),background='green')
-    city.grid(row=0,column=0,padx=20,pady=10,sticky=tk.W)
 
-    detailFrame=ttk.Frame(master=self,padding=30)
-    detailFrame.pack(fill=tk.BOTH,expand=True)
+    font_head=Font(
+      family='Times',
+      size=27,
+      slant='roman',
+      weight='normal'
+    )
+    font_normal=Font(
+      family='Times',
+      size=15,
+      weight='normal',
+      slant='roman'
+    )
+
+    mainFrame=ttk.Frame(master=self,padding=20,relief='ridge')
+    mainFrame.pack(expand=True,fill=tk.X,padx=20,pady=20)
+    city=ttk.Label(master=mainFrame,text=self.place,font=font_head,background='lightgreen',padding=20)
+    city.pack(fill=tk.BOTH,expand=True)
+
+    detailFrame=ttk.Frame(master=self,padding=30,relief='ridge')
+    detailFrame.pack(fill=tk.BOTH,expand=True,padx=20,pady=20)
 
 
     ttk.Label(master=detailFrame,text='Result',foreground='red').grid(row=1,column=0,sticky=tk.W)
-    FONT=('monospace',15)
-    district=ttk.Label(master=detailFrame,text=f'Provinc -',font=FONT)
+    district=ttk.Label(master=detailFrame,text=f'Provinc -',font=font_normal)
     district.grid(row=2,column=0,sticky=tk.W,padx=15,pady=8)
-    dis_value=ttk.Label(master=detailFrame,text=f"{self.province}",font=FONT,foreground='red')
+    dis_value=ttk.Label(master=detailFrame,text=f"{self.province}",font=font_normal,foreground='red')
     dis_value.grid(row=2,column=1,sticky=tk.W)
 
-    ttk.Label(master=detailFrame,text=f'Distance to {self.place.capitalize()} -',font=FONT).grid(row=3,column=0,sticky=tk.W,padx=15,pady=8)
-    dist=ttk.Label(master=detailFrame,text=f'{self.distance} Km',font=FONT,foreground='red')
+    ttk.Label(master=detailFrame,text=f'Distance to {self.place.capitalize()} -',font=font_normal).grid(row=3,column=0,sticky=tk.W,padx=15,pady=8)
+    dist=ttk.Label(master=detailFrame,text=f'{self.distance} Km',font=font_normal,foreground='red')
     dist.grid(row=3,column=1,sticky=tk.W)
 
-    ttk.Label(master=detailFrame,text='Mode of travel -',font=FONT).grid(row=4,column=0,sticky=tk.W,padx=15,pady=8)
+    ttk.Label(master=detailFrame,text='Mode of travel -',font=font_normal).grid(row=4,column=0,sticky=tk.W,padx=15,pady=8)
     modes=ttk.Combobox(master=detailFrame,textvariable=self.mode,values=['Car','Van','Bus'],state='readonly',justify='center')
     modes.grid(row=4,column=1,sticky=tk.W)
 
-    ttk.Label(master=detailFrame,text='Description',font=FONT).grid(row=5,column=0,sticky=tk.W,padx=15,pady=8)
-    discription=ttk.Label(master=detailFrame,text=f'{self.discription}',font=FONT,foreground='red',wraplength=340)
+    ttk.Label(master=detailFrame,text='Description',font=font_normal).grid(row=5,column=0,sticky=tk.W,padx=15,pady=8)
+    discription=ttk.Label(master=detailFrame,text=f'{self.discription}',font=font_normal,foreground='red',wraplength=340)
     discription.grid(row=5,column=1,sticky=tk.W)
 
 
 
-    ttk.Label(master=detailFrame,text='Cost per 1 Km').grid(row=6,columnspan=2,pady=5)
-    self.price=ttk.Entry(master=detailFrame,textvariable=self.price)
-    self.price.grid(row=7,columnspan=2,padx=10)
+    # ttk.Label(master=detailFrame,text='Cost per 1 Km').grid(row=6,columnspan=2,pady=5)
+    # self.price=ttk.Entry(master=detailFrame,textvariable=self.price)
+    # self.price.grid(row=7,columnspan=2,padx=10)
     
     generateBTN=ttk.Button(master=detailFrame,text='Calculate Price',style='TButton',width=30)
     generateBTN.grid(row=8,columnspan=2,pady=20,padx=10)
@@ -102,17 +116,22 @@ class DetailWindow(Toplevel):
   # calculate the price form the abouve table 
   def __calculate(self,event):
     mode=self.mode.get()
-    price=0
+    # price=0
+    uniprice=0
 
-    try:
-      price=float(self.price.get())
-    except Exception as e:
-      messagebox.showerror('Error',"invalid price!")
+    if(mode=='Car'):
+      uniprice=50
+    elif (mode=='Bus'):
+      uniprice=100
+    else:
+      uniprice=150
 
-    if(price<=0):
+    
+
+    if(uniprice<=0):
       messagebox.showinfo('Zero',message='Cost can not be zero or lessthan zero')
     else:
-      total=float(self.distance)*price
+      total=float(self.distance)*uniprice
 
       self.destroy()
       CalculateWindow(self.master,total,self.place,mode)
