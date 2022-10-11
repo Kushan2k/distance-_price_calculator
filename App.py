@@ -48,11 +48,12 @@ class App(tkinter.Tk):
 
     # creaate the frame for holding element 
     font_2 = Font(family='Times New Roman',
-              size=16,
-              weight='normal',
-              slant='roman',
-              underline=0,
-              overstrike=0)
+      size=16,
+      weight='normal',
+      slant='roman',
+      underline=0,
+      overstrike=0
+    )
     select_font=Font(
       family='Helvetica',
       size=10,
@@ -107,13 +108,9 @@ class App(tkinter.Tk):
     except Exception as e:
       messagebox.showerror(title="Error",message="fetching data failed!")
 
-  def __fetchProvince(self):
 
-    # try:
-      
-    # except Exception as e:
-    #   messagebox.showerror(title="Error",message="fetching data failed!")
-    #   self.destroy()
+  # fetch province data from the database 
+  def __fetchProvince(self):
 
     cur=self.conn.cursor()
     cur.execute("SELECT DISTINCT(province) FROM place ")

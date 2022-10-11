@@ -5,7 +5,7 @@ from tkinter.font import Font
 from PIL import Image,ImageTk
 
 
-
+# calculator window for show calculation 
 class CalculateWindow(Toplevel):
 
   def __init__(self,master,cost:int,place,mode):
@@ -18,6 +18,7 @@ class CalculateWindow(Toplevel):
     self.resizable(False,False)
     
 
+    # calling the function for building the ui 
     self.__BuildUI()
 
 
@@ -29,6 +30,8 @@ class CalculateWindow(Toplevel):
               slant='roman',
               underline=0,
               overstrike=0)
+              
+    #  frame for holding the ui elements (labels,buttons etc )         
     frame=ttk.Frame(master=self,relief='ridge')
     frame.pack(expand=True,fill=tk.BOTH,padx=20,pady=20)
 

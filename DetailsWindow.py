@@ -43,6 +43,7 @@ class DetailWindow(Toplevel):
 
   def __BuildUI(self):
 
+    # creating the font styles for the labels 
     font_head=Font(
       family='Times',
       size=27,
@@ -56,6 +57,7 @@ class DetailWindow(Toplevel):
       slant='roman'
     )
 
+    #  frame for holding the ui elements (labels,buttons etc )  
     mainFrame=ttk.Frame(master=self,padding=20,relief='ridge')
     mainFrame.pack(expand=True,fill=tk.X,padx=20,pady=20)
     city=ttk.Label(master=mainFrame,text=self.place,font=font_head,background='lightgreen',padding=20)
@@ -97,6 +99,7 @@ class DetailWindow(Toplevel):
     discription.grid(row=5,column=1,sticky=tk.W)
 
     
+    # buttion for the calculation to proceed 
     generateBTN=ttk.Button(master=detailFrame,text='Calculate Price',style='TButton',width=30)
     generateBTN.grid(row=8,columnspan=2,pady=5,padx=10)
     generateBTN.bind('<Button-1>',self.__calculate)
@@ -123,13 +126,15 @@ class DetailWindow(Toplevel):
       else:
         self.imagepath='./assets/places/placeholder.png'
     except Exception as e:
-      print(e)
+      # show the error dialog if data fetching went wrong 
       messagebox.showerror('Error',"could not fetch data")
       self.destroy()
     
 
   # calculate the price form the abouve table 
   def __calculate(self,event):
+
+    # get the selected mode from the dropdown 
     mode=self.mode.get()
     # price=0
     uniprice=0
@@ -141,14 +146,13 @@ class DetailWindow(Toplevel):
     else:
       uniprice=150
 
-    
-
     if(uniprice<=0):
       messagebox.showinfo('Zero',message='Cost can not be zero or lessthan zero')
     else:
       total=float(self.distance)*uniprice
 
       self.destroy()
+      # open the calculator window to show the cost of juouny 
       CalculateWindow(self.master,total,self.place,mode)
 
     
