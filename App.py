@@ -31,9 +31,10 @@ class App(tkinter.Tk):
       self.style=ttk.Style()
       self.__DESTINATIONS={}
       self.__PROVINCE=[]
-      self.__fetchDestications()
+      # self.__fetchDestications()
       self.__fetchProvince()
-      self.__distination=tkinter.StringVar(value=list(self.__DESTINATIONS.keys())[0])
+      # self.__distination=tkinter.StringVar(value=list(self.__DESTINATIONS.keys())[0])
+      self.__distination=tkinter.StringVar(value='Please Select')
       self.__province=tkinter.StringVar(value=self.__PROVINCE[0])
 
       # calling the init function to initalize the ui 
@@ -80,10 +81,15 @@ class App(tkinter.Tk):
     provice_box=ttk.Combobox(master=frame,values=self.__PROVINCE,justify='center',width=55,textvariable=self.__province,state='readonly',font=select_font)
     provice_box.grid(row=3,column=1,padx=10)
 
+    provice_box.bind('<<ComboboxSelected>>',self.__fetchDestications)
+
     ttk.Label(master=frame,text='Select destination:- ',font=font_2).grid(row=4,column=0,sticky=tkinter.W,padx=20)
-    select_menu=ttk.Combobox(master=frame,width=55,font=select_font,
+
+    self.select_menu=ttk.Combobox(master=frame,width=55,font=select_font,
     justify='center',values=list(self.__DESTINATIONS.keys()),textvariable=self.__distination,state='readonly')
-    select_menu.grid(row=4,column=1,pady=10,padx=10)
+    self.select_menu.grid(row=4,column=1,pady=10,padx=10)
+
+    
 
     
 
@@ -99,16 +105,22 @@ class App(tkinter.Tk):
 
 
   # function for geting the data from the database 
-  def __fetchDestications(self):
+  def __fetchDestications(self,evnt):
+
+    pr=self.__province.get()
+    self.__DESTINATIONS.clear()
     
     try:
       curser=self.conn.cursor()
-      curser.execute("SELECT id,name FROM place")
+      curser.execute(f"SELECT id,name FROM place WHERE province='{pr}'")
 
       for i in curser.fetchall():
         if i != None:
           self.__DESTINATIONS[i[1].strip()]=i[0]
+      
+      self.select_menu['values']=list(self.__DESTINATIONS.keys())
     except Exception as e:
+
       messagebox.showerror(title="Error",message="fetching data failed!")
 
 

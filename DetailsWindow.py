@@ -122,7 +122,7 @@ class DetailWindow(Toplevel):
       self.province=data[4].strip()
 
       if data[-1]!=None:
-        self.imagepath=data[-1]
+        self.imagepath=data[-1].strip()
       else:
         self.imagepath='./assets/places/placeholder.png'
     except Exception as e:
